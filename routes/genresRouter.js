@@ -40,6 +40,19 @@ genreRoutes.get("/api/genres/:id", (req, res) => {
 
 // PUT: Update existing genre in the genre list
 
-// PUT: Delete a genre from the genre list
+// DELETE: Delete a genre from the genre list
+genreRoutes.delete("/api/genres/:id", (req, res) => {
+  const genreIndex = genreList.findIndex((genre) => {
+    return genre.id === parseInt(req.params.id);
+  });
+
+  if (genreIndex < 0) {
+    return res.status(200).json({ message: "Can't find genre in the list" });
+  }
+
+  genreList.splice(genreIndex, 1); // delete the genre
+
+  return res.status(200).json({ message: "Genre successfully deleted!" });
+});
 
 module.exports = genreRoutes;
