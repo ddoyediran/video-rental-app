@@ -37,6 +37,13 @@ genreRoutes.get("/api/genres/:id", (req, res) => {
 });
 
 // POST: Add a genre to the genre list
+genreRoutes.post("/api/genres/", (req, res) => {
+  const newGenre = { id: genreList.length + 1, ...req.body };
+
+  genreList.push(newGenre);
+
+  res.status(200).json({ message: "A new genre has been added" });
+});
 
 // PUT: Update existing genre in the genre list
 
