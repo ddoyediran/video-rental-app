@@ -1,4 +1,10 @@
 const express = require("express");
+const Joi = require("joi");
+
+// Adding Joi schema for validating request input
+const schema = Joi.object({
+  name: Joi.string().min(3).required(),
+});
 
 const genreRoutes = express.Router();
 
@@ -38,11 +44,34 @@ genreRoutes.get("/api/genres/:id", (req, res) => {
 
 // POST: Add a genre to the genre list
 genreRoutes.post("/api/genres/", (req, res) => {
-  const newGenre = { id: genreList.length + 1, ...req.body };
+  const resultVal = validate({ name: req.body.name });
 
-  genreList.push(newGenre);
+  //   resultVal.then(function (result) {
+  //     console.log(result); // "Some User token"
 
-  res.status(200).json({ message: "A new genre has been added" });
+  //     const newGenre = { id: genreList.length + 1, ...result };
+
+  //     genreList.push(newGenre);
+
+  //     return res.status(200).json({ message: "A new genre has been added" });
+  //   });
+
+  //console.log(resultVal.value);
+  if (resultVal) {
+    const newGenre = { id: genreList.length + 1, ...resultVal.value };
+
+    genreList.push(newGenre);
+
+    return res.status(200).json({ message: "A new genre has been added" });
+  }
+
+  //   return res.status(200).json({ message: resultVal });
+
+  //   const newGenre = { id: genreList.length + 1, ...req.body };
+
+  //   genreList.push(newGenre);
+
+  // return res.status(200).json({ message: "A new genre has been added" });
 });
 
 // PUT: Update existing genre in the genre list
@@ -61,5 +90,22 @@ genreRoutes.delete("/api/genres/:id", (req, res) => {
 
   return res.status(200).json({ message: "Genre successfully deleted!" });
 });
+
+// Helper Function
+// INPUT: an object paramter that contain property to validate
+// OUTPUT: return outcome of the validation
+// async function validate(inputObj) {
+//   try {
+//     const value = await schema.validateAsync(inputObj);
+//     return value;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
+
+function validate(inputObj) {
+  const value = schema.validate(inputObj);
+  return value;
+}
 
 module.exports = genreRoutes;
