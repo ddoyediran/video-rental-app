@@ -75,7 +75,11 @@ genreRoutes.post("/api/genres/", (req, res) => {
 });
 
 // PUT: Update existing genre in the genre list
-genreRoutes.put("/api/genres/:id", (req, res) => {});
+genreRoutes.put("/api/genres/:id", (req, res) => {
+  const genreFound = genreList.find((genre) => {
+    return genre.id === parseInt(req.params.id);
+  });
+});
 
 // DELETE: Delete a genre from the genre list
 genreRoutes.delete("/api/genres/:id", (req, res) => {
