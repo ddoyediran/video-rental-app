@@ -76,9 +76,24 @@ genreRoutes.post("/api/genres/", (req, res) => {
 
 // PUT: Update existing genre in the genre list
 genreRoutes.put("/api/genres/:id", (req, res) => {
-  const genreFound = genreList.find((genre) => {
+  let genreFound = genreList.find((genre) => {
     return genre.id === parseInt(req.params.id);
   });
+
+  if (genreFound) {
+    let updated = {
+      id: genreFound.id,
+      name: req.body.name,
+    };
+
+    const targetIndex = genreList.indexOf(genreFound);
+
+    genreList.splice(targetIndex, 1, updated);
+
+    return res.status(200).json({ message: updated });
+  }
+
+  return res.status(404).json({ message: "Genre not found" });
 });
 
 // DELETE: Delete a genre from the genre list
