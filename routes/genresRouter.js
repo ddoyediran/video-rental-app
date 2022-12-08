@@ -123,6 +123,11 @@ genreRoutes.delete("/api/genres/:id", (req, res) => {
 //   }
 // }
 
+/**
+ *
+ * @param {params} inputObj
+ * @returns {object}
+ */
 function validate(inputObj) {
   const value = schema.validate(inputObj);
   return value;
