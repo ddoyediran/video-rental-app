@@ -44,9 +44,9 @@ genreRoutes.get("/api/genres/:id", (req, res) => {
 
 // POST: Add a genre to the genre list
 genreRoutes.post("/api/genres/", (req, res) => {
-  const resultVal = validate({ name: req.body.name });
+  const result = validate({ name: req.body.name });
 
-  //   resultVal.then(function (result) {
+  //   result.then(function (result) {
   //     console.log(result); // "Some User token"
 
   //     const newGenre = { id: genreList.length + 1, ...result };
@@ -56,22 +56,21 @@ genreRoutes.post("/api/genres/", (req, res) => {
   //     return res.status(200).json({ message: "A new genre has been added" });
   //   });
 
-  //console.log(resultVal.value);
-  if (resultVal) {
-    const newGenre = { id: genreList.length + 1, ...resultVal.value };
+  // console.log(result);
+  // if error
+  if (result.error) {
+    // console.log(resultVal.error.details[0].message);
+    return res.status(400).send(result.error.details[0].message);
+  }
+
+  // no error, then add to the genre array
+  if (result.value) {
+    const newGenre = { id: genreList.length + 1, ...result.value };
 
     genreList.push(newGenre);
 
     return res.status(200).json({ message: "A new genre has been added" });
   }
-
-  //   return res.status(200).json({ message: resultVal });
-
-  //   const newGenre = { id: genreList.length + 1, ...req.body };
-
-  //   genreList.push(newGenre);
-
-  // return res.status(200).json({ message: "A new genre has been added" });
 });
 
 // PUT: Update existing genre in the genre list
@@ -81,16 +80,37 @@ genreRoutes.put("/api/genres/:id", (req, res) => {
   });
 
   if (genreFound) {
-    let updated = {
-      id: genreFound.id,
-      name: req.body.name,
-    };
+    const result = validate({ name: req.body.name });
 
-    const targetIndex = genreList.indexOf(genreFound);
+    // if error
+    if (result.error) {
+      // console.log(resultVal.error.details[0].message);
+      return res.status(400).send(result.error.details[0].message);
+    }
 
-    genreList.splice(targetIndex, 1, updated);
+    if (result.value) {
+      let updated = {
+        id: genreFound.id,
+        name: req.body.name,
+      };
 
-    return res.status(200).json({ message: updated });
+      const targetIndex = genreList.indexOf(genreFound);
+
+      genreList.splice(targetIndex, 1, updated);
+
+      return res.status(200).json({ message: updated });
+    }
+
+    // let updated = {
+    //   id: genreFound.id,
+    //   name: req.body.name,
+    // };
+
+    // const targetIndex = genreList.indexOf(genreFound);
+
+    // genreList.splice(targetIndex, 1, updated);
+
+    // return res.status(200).json({ message: updated });
   }
 
   return res.status(404).json({ message: "Genre not found" });
