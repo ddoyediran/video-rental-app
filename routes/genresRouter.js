@@ -36,7 +36,7 @@ genreRoutes.get("/api/genres/:id", (req, res) => {
   });
 
   if (!genre) {
-    return res.status(200).json({ message: "Genre not in the Genre List" });
+    return res.status(404).json({ message: "Genre not in the Genre List" });
   }
 
   return res.status(200).json({ genre });
@@ -123,7 +123,7 @@ genreRoutes.delete("/api/genres/:id", (req, res) => {
   });
 
   if (genreIndex < 0) {
-    return res.status(200).json({ message: "Can't find genre in the list" });
+    return res.status(404).json({ message: "Can't find genre in the list" });
   }
 
   genreList.splice(genreIndex, 1); // delete the genre
