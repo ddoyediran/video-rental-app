@@ -100,17 +100,6 @@ genreRoutes.put("/api/genres/:id", (req, res) => {
 
       return res.status(200).json({ message: updated });
     }
-
-    // let updated = {
-    //   id: genreFound.id,
-    //   name: req.body.name,
-    // };
-
-    // const targetIndex = genreList.indexOf(genreFound);
-
-    // genreList.splice(targetIndex, 1, updated);
-
-    // return res.status(200).json({ message: updated });
   }
 
   return res.status(404).json({ message: "Genre not found" });
