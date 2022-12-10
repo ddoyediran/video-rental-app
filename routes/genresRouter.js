@@ -8,6 +8,7 @@ const schema = Joi.object({
 
 const genreRoutes = express.Router();
 
+// store genre type
 const genreList = [
   { id: 1, name: "Action" },
   { id: 2, name: "Adventure" },
