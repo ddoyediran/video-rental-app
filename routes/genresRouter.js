@@ -6,6 +6,16 @@ const schema = Joi.object({
   name: Joi.string().min(3).required(),
 });
 
+/**
+ *
+ * @param {params} inputObj
+ * @returns {object}
+ */
+function validate(inputObj) {
+  const value = schema.validate(inputObj);
+  return value;
+}
+
 const genreRoutes = express.Router();
 
 // store genre type
@@ -46,18 +56,6 @@ genreRoutes.get("/api/genres/:id", (req, res) => {
 // POST: Add a genre to the genre list
 genreRoutes.post("/api/genres/", (req, res) => {
   const result = validate({ name: req.body.name });
-
-  //   result.then(function (result) {
-  //     console.log(result); // "Some User token"
-
-  //     const newGenre = { id: genreList.length + 1, ...result };
-
-  //     genreList.push(newGenre);
-
-  //     return res.status(200).json({ message: "A new genre has been added" });
-  //   });
-
-  // console.log(result);
   // if error
   if (result.error) {
     // console.log(resultVal.error.details[0].message);
@@ -132,15 +130,5 @@ genreRoutes.delete("/api/genres/:id", (req, res) => {
 //     console.error(err);
 //   }
 // }
-
-/**
- *
- * @param {params} inputObj
- * @returns {object}
- */
-function validate(inputObj) {
-  const value = schema.validate(inputObj);
-  return value;
-}
 
 module.exports = genreRoutes;
