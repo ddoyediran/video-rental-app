@@ -3,12 +3,13 @@ require("dotenv").config();
 
 const genreRoutes = require("./routes/genresRouter");
 
+const port = process.env.PORT || 4500;
+
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const port = process.env.PORT || 4500;
 app.use(genreRoutes);
 
 app.get("/", (req, res) => {
