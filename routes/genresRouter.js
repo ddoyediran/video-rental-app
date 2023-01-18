@@ -119,16 +119,4 @@ genreRoutes.delete("/api/genres/:id", (req, res) => {
   return res.status(200).json({ message: "Genre successfully deleted!" });
 });
 
-// Helper Function
-// INPUT: an object paramter that contain property to validate
-// OUTPUT: return outcome of the validation
-// async function validate(inputObj) {
-//   try {
-//     const value = await schema.validateAsync(inputObj);
-//     return value;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
 module.exports = genreRoutes;
