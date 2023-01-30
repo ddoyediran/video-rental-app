@@ -37,7 +37,7 @@ genreRoutes.get("/api/genres", (req, res) => {
     return res.status(200).json({ message: "Genres list is empty" });
   }
 
-  return res.status(200).json({ list: genreList });
+  res.status(200).json({ list: genreList });
 });
 
 // GET a single genre from the genre list
@@ -50,7 +50,7 @@ genreRoutes.get("/api/genres/:id", (req, res) => {
     return res.status(404).json({ message: "Genre not in the Genre List" });
   }
 
-  return res.status(200).json({ genre });
+  res.status(200).json({ genre });
 });
 
 // POST: Add a genre to the genre list
@@ -67,7 +67,7 @@ genreRoutes.post("/api/genres/", (req, res) => {
 
   genreList.push(newGenre);
 
-  return res.status(201).json({ message: "A new genre has been added" });
+  res.status(201).json({ message: "A new genre has been added" });
 });
 
 // PUT: Update existing genre in the genre list
@@ -98,7 +98,7 @@ genreRoutes.put("/api/genres/:id", (req, res) => {
 
   genreList.splice(targetIndex, 1, updated);
 
-  return res.status(200).json({ message: updated });
+  res.status(200).json({ message: updated });
 });
 
 // DELETE: Delete a genre from the genre list
@@ -114,7 +114,7 @@ genreRoutes.delete("/api/genres/:id", (req, res) => {
 
   genreList.splice(genreIndex, 1); // delete the genre
 
-  return res.status(200).json({ message: "Genre successfully deleted!" });
+  res.status(200).json({ message: "Genre successfully deleted!" });
 });
 
 module.exports = genreRoutes;
