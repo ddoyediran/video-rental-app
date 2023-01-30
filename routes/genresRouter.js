@@ -68,7 +68,7 @@ genreRoutes.post("/api/genres/", (req, res) => {
 
     genreList.push(newGenre);
 
-    return res.status(200).json({ message: "A new genre has been added" });
+    return res.status(201).json({ message: "A new genre has been added" });
   }
 });
 
@@ -110,6 +110,7 @@ genreRoutes.delete("/api/genres/:id", (req, res) => {
     return genre.id === parseInt(req.params.id);
   });
 
+  // if the genre doesn't exist inside the genreList then we don't want to go ahead with performing the delete operation
   if (genreIndex < 0) {
     return res.status(404).json({ message: "Can't find genre in the list" });
   }
