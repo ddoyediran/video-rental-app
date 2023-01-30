@@ -1,13 +1,15 @@
 const express = require("express");
 const Joi = require("joi");
 
+const genreRoutes = express.Router();
+
 // Adding Joi schema for validating request input
 const schema = Joi.object({
   name: Joi.string().min(3).required(),
 });
 
 /**
- *
+ * Helper method to validate client input
  * @param {params} inputObj
  * @returns {object}
  */
@@ -15,8 +17,6 @@ function validate(inputObj) {
   const value = schema.validate(inputObj);
   return value;
 }
-
-const genreRoutes = express.Router();
 
 // store genre type
 const genreList = [
@@ -76,30 +76,29 @@ genreRoutes.put("/api/genres/:id", (req, res) => {
     return genre.id === parseInt(req.params.id);
   });
 
-  if (genreFound) {
-    const result = validate({ name: req.body.name });
-
-    // if error
-    if (result.error) {
-      // console.log(resultVal.error.details[0].message);
-      return res.status(400).send(result.error.details[0].message);
-    }
-
-    if (result.value) {
-      let updated = {
-        id: genreFound.id,
-        name: req.body.name,
-      };
-
-      const targetIndex = genreList.indexOf(genreFound);
-
-      genreList.splice(targetIndex, 1, updated);
-
-      return res.status(200).json({ message: updated });
-    }
+  // if genre not in the genreList
+  if (!genreFound) {
+    return res.status(404).json({ message: "Genre not found" });
   }
 
-  return res.status(404).json({ message: "Genre not found" });
+  const result = validate({ name: req.body.name });
+
+  // if error
+  if (result.error) {
+    // console.log(resultVal.error.details[0].message);
+    return res.status(400).send(result.error.details[0].message);
+  }
+
+  let updated = {
+    id: genreFound.id,
+    name: req.body.name,
+  };
+
+  const targetIndex = genreList.indexOf(genreFound);
+
+  genreList.splice(targetIndex, 1, updated);
+
+  return res.status(200).json({ message: updated });
 });
 
 // DELETE: Delete a genre from the genre list
