@@ -63,13 +63,11 @@ genreRoutes.post("/api/genres/", (req, res) => {
   }
 
   // no error, then add to the genre array
-  if (result.value) {
-    const newGenre = { id: genreList.length + 1, ...result.value };
+  const newGenre = { id: genreList.length + 1, ...result.value };
 
-    genreList.push(newGenre);
+  genreList.push(newGenre);
 
-    return res.status(201).json({ message: "A new genre has been added" });
-  }
+  return res.status(201).json({ message: "A new genre has been added" });
 });
 
 // PUT: Update existing genre in the genre list
