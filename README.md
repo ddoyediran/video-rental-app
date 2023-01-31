@@ -1,3 +1,3 @@
 ### Deploy link
 
-View live [here](https://video-rental-app.onrender.com)
+View API live [here](https://video-rental-app.onrender.com)
