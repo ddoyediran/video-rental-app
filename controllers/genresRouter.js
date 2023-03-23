@@ -114,34 +114,57 @@ genreRoutes.post("/", async (req, res) => {
 });
 
 // PUT: Update existing genre in the genre list
-genreRoutes.put("/:id", (req, res) => {
-  let genreFound = genreList.find((genre) => {
-    return genre.id === parseInt(req.params.id);
-  });
+genreRoutes.put("/:id", async (req, res) => {
+  try {
+    // validate the name
+    const result = validate({ name: req.body.name });
 
-  // if genre not in the genreList
-  if (!genreFound) {
-    return res.status(404).json({ message: "Genre not found" });
+    // if error
+    if (result.error) {
+      // console.log(resultVal.error.details[0].message);
+      return res.status(400).send(result.error.details[0].message);
+    }
+
+    const name = req.body.name;
+
+    const genreUpdated = await Genre.findByIdAndUpdate(
+      req.params.id,
+      { name },
+      { new: true }
+    );
+
+    res.status(201).json({ genreUpdated });
+  } catch (err) {
+    console.error(err);
   }
 
-  const result = validate({ name: req.body.name });
+  // let genreFound = genreList.find((genre) => {
+  //   return genre.id === parseInt(req.params.id);
+  // });
 
-  // if error
-  if (result.error) {
-    // console.log(resultVal.error.details[0].message);
-    return res.status(400).send(result.error.details[0].message);
-  }
+  // // if genre not in the genreList
+  // if (!genreFound) {
+  //   return res.status(404).json({ message: "Genre not found" });
+  // }
 
-  let updated = {
-    id: genreFound.id,
-    name: req.body.name,
-  };
+  // const result = validate({ name: req.body.name });
 
-  const targetIndex = genreList.indexOf(genreFound);
+  // // if error
+  // if (result.error) {
+  //   // console.log(resultVal.error.details[0].message);
+  //   return res.status(400).send(result.error.details[0].message);
+  // }
 
-  genreList.splice(targetIndex, 1, updated);
+  // let updated = {
+  //   id: genreFound.id,
+  //   name: req.body.name,
+  // };
 
-  res.status(200).json({ message: updated });
+  // const targetIndex = genreList.indexOf(genreFound);
+
+  // genreList.splice(targetIndex, 1, updated);
+
+  // res.status(200).json({ message: updated });
 });
 
 // DELETE: Delete a genre from the genre list
