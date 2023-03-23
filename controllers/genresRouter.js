@@ -168,19 +168,27 @@ genreRoutes.put("/:id", async (req, res) => {
 });
 
 // DELETE: Delete a genre from the genre list
-genreRoutes.delete("/:id", (req, res) => {
-  const genreIndex = genreList.findIndex((genre) => {
-    return genre.id === parseInt(req.params.id);
-  });
+genreRoutes.delete("/:id", async (req, res) => {
+  try {
+    const deleteGenre = await Genre.findByIdAndRemove(req.params.id);
 
-  // if the genre doesn't exist inside the genreList then we don't want to go ahead with performing the delete operation
-  if (genreIndex < 0) {
-    return res.status(404).json({ message: "Can't find genre in the list" });
+    res.status(204).end();
+  } catch (err) {
+    console.error(err);
   }
 
-  genreList.splice(genreIndex, 1); // delete the genre
+  // const genreIndex = genreList.findIndex((genre) => {
+  //   return genre.id === parseInt(req.params.id);
+  // });
 
-  res.status(200).json({ message: "Genre successfully deleted!" });
+  // // if the genre doesn't exist inside the genreList then we don't want to go ahead with performing the delete operation
+  // if (genreIndex < 0) {
+  //   return res.status(404).json({ message: "Can't find genre in the list" });
+  // }
+
+  // genreList.splice(genreIndex, 1); // delete the genre
+
+  // res.status(200).json({ message: "Genre successfully deleted!" });
 });
 
 module.exports = genreRoutes;
