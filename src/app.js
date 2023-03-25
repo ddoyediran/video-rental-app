@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-app.use("/api/genres", genreRoutes);
+app.use("/api/v1/genres", genreRoutes);
 
 app.listen(config.PORT, () => {
   console.log(`Server is listening on port ${config.PORT}`);

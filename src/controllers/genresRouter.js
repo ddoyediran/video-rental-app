@@ -42,7 +42,7 @@ const getAllGenres = async (req, res, next) => {
 // });
 
 // GET a single genre from the genre list
-genreRoutes.get("/:id", async (req, res) => {
+const getSingleGenre = async (req, res, next) => {
   try {
     const genre = await Genre.findById(req.params.id);
 
@@ -52,9 +52,23 @@ genreRoutes.get("/:id", async (req, res) => {
 
     res.status(200).json({ genre });
   } catch (err) {
-    console.error(err);
+    next(err);
   }
-});
+};
+
+// genreRoutes.get("/:id", async (req, res) => {
+//   try {
+//     const genre = await Genre.findById(req.params.id);
+
+//     if (!genre) {
+//       return res.status(404).json({ message: "Genre not found!" });
+//     }
+
+//     res.status(200).json({ genre });
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
 
 // POST: Add a genre to the genre list
 genreRoutes.post("/", async (req, res) => {
@@ -121,5 +135,6 @@ genreRoutes.delete("/:id", async (req, res) => {
 
 module.exports = {
   genreRoutes,
+  getSingleGenre,
   getAllGenres,
 };
