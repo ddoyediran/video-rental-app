@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
-const genreRoutes = require("./controllers/genresRouter");
+//const genreRoutes = require("./controllers/genresRouter");
 const config = require("./utils/config");
+const genreRoutes = require("./routes/genre");
 
 const port = process.env.PORT || 4500;
 

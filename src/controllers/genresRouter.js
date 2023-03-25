@@ -1,5 +1,6 @@
 const express = require("express");
 const Joi = require("joi");
+//const Genre = require("../models/genre");
 const Genre = require("../models/genre");
 
 const genreRoutes = express.Router();
@@ -22,14 +23,23 @@ function validate(inputObj) {
 /// Creating the routes ///
 
 // GET all movies genres in the genre list
-genreRoutes.get("/", async (req, res) => {
+const getAllGenres = async (req, res, next) => {
   try {
     const allGenres = await Genre.find({});
     res.status(200).json({ allGenres });
   } catch (err) {
-    console.error(err);
+    next(err);
   }
-});
+};
+
+// genreRoutes.get("/", async (req, res) => {
+//   try {
+//     const allGenres = await Genre.find({});
+//     res.status(200).json({ allGenres });
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
 
 // GET a single genre from the genre list
 genreRoutes.get("/:id", async (req, res) => {
@@ -109,4 +119,7 @@ genreRoutes.delete("/:id", async (req, res) => {
   }
 });
 
-module.exports = genreRoutes;
+module.exports = {
+  genreRoutes,
+  getAllGenres,
+};
