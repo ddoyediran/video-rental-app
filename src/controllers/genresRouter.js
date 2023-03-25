@@ -121,7 +121,7 @@ const createGenre = async (req, res, next) => {
 // });
 
 // PUT: Update existing genre in the genre list
-genreRoutes.put("/:id", async (req, res) => {
+const updateGenre = async (req, res) => {
   try {
     // validate the name
     const result = validate({ name: req.body.name });
@@ -140,11 +140,40 @@ genreRoutes.put("/:id", async (req, res) => {
       { new: true }
     );
 
+    if (!genreUpdated) {
+      return res.status(404).json({ message: "Genre not found!" });
+    }
+
     res.status(201).json({ genreUpdated });
   } catch (err) {
     console.error(err);
   }
-});
+};
+
+// genreRoutes.put("/:id", async (req, res) => {
+//   try {
+//     // validate the name
+//     const result = validate({ name: req.body.name });
+
+//     // if error
+//     if (result.error) {
+//       // console.log(resultVal.error.details[0].message);
+//       return res.status(400).send(result.error.details[0].message);
+//     }
+
+//     const name = req.body.name;
+
+//     const genreUpdated = await Genre.findByIdAndUpdate(
+//       req.params.id,
+//       { name },
+//       { new: true }
+//     );
+
+//     res.status(201).json({ genreUpdated });
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
 
 // DELETE: Delete a genre from the genre list
 genreRoutes.delete("/:id", async (req, res) => {
@@ -162,4 +191,5 @@ module.exports = {
   getAllGenres,
   getSingleGenre,
   createGenre,
+  updateGenre,
 };
