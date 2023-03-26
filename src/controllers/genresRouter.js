@@ -31,15 +31,6 @@ const getAllGenres = async (req, res, next) => {
   }
 };
 
-// genreRoutes.get("/", async (req, res) => {
-//   try {
-//     const allGenres = await Genre.find({});
-//     res.status(200).json({ allGenres });
-//   } catch (err) {
-//     console.error(err);
-//   }
-// });
-
 // GET a single genre from the genre list
 const getSingleGenre = async (req, res, next) => {
   try {
