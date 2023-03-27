@@ -46,20 +46,6 @@ const getSingleGenre = async (req, res, next) => {
   }
 };
 
-// genreRoutes.get("/:id", async (req, res) => {
-//   try {
-//     const genre = await Genre.findById(req.params.id);
-
-//     if (!genre) {
-//       return res.status(404).json({ message: "Genre not found!" });
-//     }
-
-//     res.status(200).json({ genre });
-//   } catch (err) {
-//     console.error(err);
-//   }
-// });
-
 // POST: Add a genre to the genre list
 const createGenre = async (req, res, next) => {
   try {
