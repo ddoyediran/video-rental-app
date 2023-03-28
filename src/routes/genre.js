@@ -5,12 +5,12 @@ const {
   createGenre,
   updateGenre,
   deleteSingleGenre,
-} = require("../controllers/genresRouter");
+} = require("../controllers/genres");
 
-router.get("/", getAllGenres);
-router.get("/:id", getSingleGenre);
-router.post("/", createGenre);
-router.put("/:id", updateGenre);
-router.delete("/:id", deleteSingleGenre);
+router.get("/", getAllGenres); // get all genres
+router.get("/:id", getSingleGenre); // get single genre
+router.post("/", createGenre); // create new genre
+router.put("/:id", updateGenre); // update genre
+router.delete("/:id", deleteSingleGenre); // delete single genre
 
 module.exports = router;
