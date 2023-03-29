@@ -16,12 +16,15 @@ const rentalSchema = new mongoose.Rental({
   dateOut: {
     type: Date,
     default: Date.now(),
+    required: true,
   },
   dateReturned: {
     type: Date,
+    required: true,
   },
   rentalFee: {
-    Type: Number,
+    type: Number,
+    required: true,
   },
 });
 
