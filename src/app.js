@@ -6,8 +6,7 @@ const connectDB = require("./db/connect");
 const config = require("./utils/config");
 const genreRoutes = require("./routes/genre");
 const customerRoutes = require("./routes/customer");
-
-//const port = process.env.PORT || 4500;
+const movieRoutes = require("./routes/movie");
 
 const app = express();
 
@@ -32,6 +31,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/genres", genreRoutes);
 app.use("/api/v1/customers", customerRoutes);
+app.use("/api/v1/movies", movieRoutes);
 
 const start = async () => {
   try {
@@ -52,7 +52,3 @@ const start = async () => {
 };
 
 start();
-
-// app.listen(config.PORT, () => {
-//   console.log(`Server is listening on port ${config.PORT}`);
-// });
