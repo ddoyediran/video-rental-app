@@ -1,6 +1,6 @@
-const express = require("express");
 const Joi = require("joi");
 const Genre = require("../models/genre");
+const Movie = require("../models/movie");
 
 // Adding Joi schema for validating request input
 const schema = Joi.object({
@@ -115,10 +115,42 @@ const deleteSingleGenre = async (req, res, next) => {
   }
 };
 
+// Create a movie for a genre
+const createMovie = async (req, res, next) => {
+  // create a new movie based on request body
+  const newMovie = new Movie(req.body);
+  // extract genreId from route
+  const { genreId } = req.params;
+  // set the movie's genre via route parameters
+  newMovie.genre = genreId;
+
+  return newMovie
+    .save()
+    .then((movie) => {
+      // update the genre's movie array
+      return Genre.findByIdAndUpdate(
+        genreId,
+        // add a set of new movies to the list of Genre movies
+        // $addToSet is used instead of $push so we can ignore duplicate
+        { $addToSet: { movies: movie._id } }
+      );
+    })
+    .then(() => {
+      return res.status(201).json({ movie: newMovie });
+    })
+    .catch((err) => {
+      next(err);
+    });
+
+  // save the new movie
+  // const savedMovie = await newMovie.save();
+};
+
 module.exports = {
   getAllGenres,
   getSingleGenre,
   createGenre,
   updateGenre,
   deleteSingleGenre,
+  createMovie,
 };
