@@ -22,7 +22,7 @@ function validate(inputObj) {
 // GET all movies genres in the genre list
 const getAllGenres = async (req, res, next) => {
   try {
-    const genres = await Genre.find({});
+    const genres = await Genre.find({}).sort("name");
     res.status(200).json({ genres });
   } catch (err) {
     next(err);
@@ -64,7 +64,7 @@ const createGenre = async (req, res, next) => {
 
     const savedGenre = await genre.save();
 
-    res.status(201).json(savedGenre);
+    res.status(201).json({ genre: savedGenre });
   } catch (err) {
     next(err);
   }
@@ -94,7 +94,7 @@ const updateGenre = async (req, res, next) => {
       return res.status(404).json({ message: "Genre not found!" });
     }
 
-    res.status(201).json({ genreUpdated });
+    res.status(201).json({ genre: genreUpdated });
   } catch (err) {
     next(err);
   }
