@@ -22,8 +22,8 @@ function validate(inputObj) {
 // GET all movies genres in the genre list
 const getAllGenres = async (req, res, next) => {
   try {
-    const allGenres = await Genre.find({});
-    res.status(200).json({ allGenres });
+    const genres = await Genre.find({});
+    res.status(200).json({ genres });
   } catch (err) {
     next(err);
   }

@@ -5,6 +5,7 @@ const connectDB = require("./db/connect");
 //const genreRoutes = require("./controllers/genresRouter");
 const config = require("./utils/config");
 const genreRoutes = require("./routes/genre");
+const customerRoutes = require("./routes/customer");
 
 //const port = process.env.PORT || 4500;
 
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/genres", genreRoutes);
+app.use("/api/v1/customers", customerRoutes);
 
 const start = async () => {
   try {
