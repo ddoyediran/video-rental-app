@@ -115,7 +115,7 @@ const deleteSingleGenre = async (req, res, next) => {
   }
 };
 
-// Create a movie for a genre
+// Create a movie with a genre
 const createMovie = async (req, res, next) => {
   // create a new movie based on request body
   const newMovie = new Movie(req.body);
@@ -146,6 +146,42 @@ const createMovie = async (req, res, next) => {
   // const savedMovie = await newMovie.save();
 };
 
+// Get all movies for a genre
+const getAllMoviesForAGenre = async (req, res, next) => {
+  try {
+    const genre = await Genre.findById(req.params.genreId)
+      .populate("movies")
+      .exec();
+
+    if (!genre) {
+      return res.status(404).json({ message: "No genre found!" });
+    }
+
+    res.status(200).json({ genre });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Get a single movie for a genre
+const getAMovieForAGenre = async (req, res, next) => {
+  try {
+    const genre = await Genre.findById(req.params.genreId)
+      .populate("movies")
+      .exec();
+
+    if (!genre) {
+      return res.status(404).json({ message: "Genre not found!" });
+    }
+
+    const movies = await Movie.findById(req.params.movieId).select(["-genre"]);
+
+    res.status(200).json({ movies });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getAllGenres,
   getSingleGenre,
@@ -153,4 +189,6 @@ module.exports = {
   updateGenre,
   deleteSingleGenre,
   createMovie,
+  getAMovieForAGenre,
+  getAllMoviesForAGenre,
 };
