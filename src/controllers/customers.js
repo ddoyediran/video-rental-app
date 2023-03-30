@@ -34,12 +34,11 @@ const getCustomer = async (req, res, next) => {
     const customer = await Customer.findById(req.params.id);
 
     if (!customer) {
-      return res.status(400).json({ message: "Customer not found!" });
+      return res.status(404).json({ message: "Customer not found!" });
     }
 
     res.status(200).json({ customer });
   } catch (err) {
-    console.error(err.message);
     next(err);
   }
 };
