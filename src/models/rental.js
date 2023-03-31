@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const rentalSchema = new mongoose.Rental({
+const rentalSchema = new mongoose.Schema({
   customer: [
     {
       type: mongoose.Schema.Types.ObjectId,
