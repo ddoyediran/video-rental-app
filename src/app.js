@@ -7,6 +7,7 @@ const config = require("./utils/config");
 const genreRoutes = require("./routes/genre");
 const customerRoutes = require("./routes/customer");
 const movieRoutes = require("./routes/movie");
+const rentalRoutes = require("./routes/rental");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/genres", genreRoutes);
 app.use("/api/v1/customers", customerRoutes);
 app.use("/api/v1/movies", movieRoutes);
+app.use("/api/v1/rentals", rentalRoutes);
 
 const start = async () => {
   try {
