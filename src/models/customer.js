@@ -13,6 +13,12 @@ const customerSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  // movieRented: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "Movies",
+  //   },
+  // ],
 });
 
 module.exports = mongoose.model("Customer", customerSchema);
