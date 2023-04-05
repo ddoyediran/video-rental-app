@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-const customerSchema = new mongoose.Schema({
+const CustomerSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, "Please provide a name"],
   },
   isGold: {
     type: Boolean,
@@ -11,7 +12,15 @@ const customerSchema = new mongoose.Schema({
   },
   phone: {
     type: Number,
-    required: true,
+    required: [true, "Please provide your phone number"],
+  },
+  email: {
+    type: String,
+    required: [true, "Please provide an email"],
+  },
+  password: {
+    type: String,
+    required: [true, "Password is required"],
   },
   // movieRented: [
   //   {
@@ -21,4 +30,14 @@ const customerSchema = new mongoose.Schema({
   // ],
 });
 
-module.exports = mongoose.model("Customer", customerSchema);
+CustomerSchema.pre("save", async function () {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+CustomerSchema.methods.comparePassword = async function (candidatePassword) {
+  const isMatch = await bcrypt.compare(candidatePassword, this.password);
+  return isMatch;
+};
+
+module.exports = mongoose.model("Customer", CustomerSchema);

@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
 const connectDB = require("./db/connect");
 const config = require("./utils/config");
 const genreRoutes = require("./routes/genre");
@@ -13,6 +14,7 @@ const app = express();
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.JWT_SECRET));
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
