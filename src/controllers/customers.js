@@ -1,11 +1,19 @@
 const Customer = require("../models/customer");
 const Joi = require("joi");
+const { createUserPayload, attachCookiesToResponse } = require("../utils");
 
 // Adding Joi schema for validating request input
 const schema = Joi.object({
   name: Joi.string().min(3).required(),
   phone: Joi.number().min(9).required(),
   isGold: Joi.boolean().required(),
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net", "ng", "fr"] },
+    })
+    .required(),
+  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
 });
 
 /**
@@ -49,6 +57,8 @@ const createCustomer = async (req, res, next) => {
       name: req.body.name,
       phone: req.body.phone,
       isGold: req.body.isGold,
+      email: req.body.email,
+      password: req.body.password,
     });
 
     if (validated.error) {
@@ -57,8 +67,8 @@ const createCustomer = async (req, res, next) => {
 
     // check if customer already exist in the database
     const customerExist = await Customer.exists({
-      name: req.body.name,
-      phone: req.body.phone,
+      email: req.body.email,
+      //phone: req.body.phone,
     });
 
     if (customerExist) {
@@ -69,7 +79,14 @@ const createCustomer = async (req, res, next) => {
 
     const savedCustomer = await customer.save();
 
-    res.status(201).json({ customer: savedCustomer });
+    res.status(201).json({
+      customer: {
+        name: savedCustomer.name,
+        phone: savedCustomer.phone,
+        email: savedCustomer.email,
+        isGold: savedCustomer.isGold,
+      },
+    });
   } catch (err) {
     next(err);
   }
@@ -119,10 +136,55 @@ const deleteCustomer = async (req, res, next) => {
   }
 };
 
+const loginCustomer = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(404)
+        .json({ message: "Please provide an email and password" });
+    }
+
+    const customer = await Customer.findOne({ email });
+
+    if (!customer) {
+      return res.status(404).json({ message: "Invalid Credentials" });
+    }
+
+    const isPasswordCorrect = await customer.comparePassword(password);
+
+    if (!isPasswordCorrect) {
+      return res.status(404).json({ message: "Invalid Credentials" });
+    }
+
+    const customerPayload = createUserPayload(customer);
+    attachCookiesToResponse({ res, customer: customerPayload });
+
+    res.status(201).json({ customer: customerPayload });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const logoutCustomer = async (req, res, next) => {
+  try {
+    res.cookie("token", "logout", {
+      httpOnly: true,
+      expires: new Date(Date.now() + 1000),
+    });
+    res.status(200).json({ message: "Customer logged out" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getAllCustomers,
   getCustomer,
   createCustomer,
   updateCustomer,
   deleteCustomer,
+  loginCustomer,
+  logoutCustomer,
 };
