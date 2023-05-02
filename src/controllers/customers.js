@@ -29,7 +29,7 @@ function validate(inputObj) {
 // Get all customers
 const getAllCustomers = async (req, res, next) => {
   try {
-    const customers = await Customer.find({}).sort("name");
+    const customers = await Customer.find({}, { password: 0 }).sort("name");
     res.status(200).json({ customers });
   } catch (err) {
     next(err);
@@ -39,7 +39,7 @@ const getAllCustomers = async (req, res, next) => {
 // Get single customer
 const getCustomer = async (req, res, next) => {
   try {
-    const customer = await Customer.findById(req.params.id);
+    const customer = await Customer.findById(req.params.id, { password: 0 });
 
     if (!customer) {
       return res.status(404).json({ message: "Customer not found!" });
@@ -109,7 +109,7 @@ const updateCustomer = async (req, res, next) => {
     const updatedCustomer = await Customer.findByIdAndUpdate(
       req.params.id,
       { ...update },
-      { new: true }
+      { fields: { password: 0 }, new: true }
     );
 
     if (!updatedCustomer) {
